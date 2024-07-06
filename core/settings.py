@@ -15,7 +15,9 @@ SECRET_KEY = "django-insecure-4znoy540=a2%g&1g*#fpuw981v3qk7i1#@e3(l-p0tugp9q2et
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+]
 
 
 # Application definition
@@ -115,3 +117,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:8000/api/planets/batch_create/"
+]

@@ -1,3 +1,4 @@
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import serializers
 
 from api.models import Terrain, Climate, Planet
@@ -34,14 +35,13 @@ class PlanetSerializer(serializers.ModelSerializer):
         terrains_data = validated_data.pop('terrains')
         climates_data = validated_data.pop('climates')
         planet = Planet.objects.create(**validated_data)
-        breakpoint()
 
         for terrain_data in terrains_data:
-            terrain, created = Terrain.objects.get_or_create(**terrain_data)
+            terrain, _ = Terrain.objects.get_or_create(**terrain_data)
             planet.terrains.add(terrain)
 
         for climate_data in climates_data:
-            climate, created = Climate.objects.get_or_create(**climate_data)
+            climate, _ = Climate.objects.get_or_create(**climate_data)
             planet.climates.add(climate)
 
         return planet

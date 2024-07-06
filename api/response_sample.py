@@ -1,9 +1,5 @@
 """
-response = [
-    {'name': 'Tatooine', 'population': 200000, 'terrains': ['desert'], 'climates': ['arid']}
-    {'name': 'Alderaan', 'population': 2000000000, 'terrains': ['grasslands', 'mountains'], 'climates': ['temperate']}
-    {'name': 'Yavin IV', 'population': 1000, 'terrains': ['jungle', 'rainforests'],
-     'climates': ['temperate', 'tropical']}
+response =
     {'name': 'Hoth', 'population': None, 'terrains': ['tundra', 'ice caves', 'mountain ranges'], 'climates': ['frozen']}
     {'name': 'Dagobah', 'population': None, 'terrains': ['swamp', 'jungles'], 'climates': ['murky']}
     {'name': 'Bespin', 'population': 6000000, 'terrains': ['gas giant'], 'climates': ['temperate']}

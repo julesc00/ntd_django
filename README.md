@@ -1,12 +1,9 @@
 # Django REST API
 
-## Description
-Django REST API application exercise by [NTD Software](https://www.ntdsoftware.com/).
-
 ## Dependencies
-1. Install Poetry: Start a terminal and run the following commands:  
-```curl -sSL https://install.python-poetry.org | python3 -```  
-```poetry init```  
-```poetry install```  
-Start environment:  ```poetry shell```  
+1. Install Pipenv: Start a terminal and run the following commands:  
+```pip install --user pipenv```  
+2. Install Django:  
+```pipenv install django```  
+Start environment:  ```pipenv shell```  
 Run server: ```python manage.py runserver``` or ```./manage.py runserver```

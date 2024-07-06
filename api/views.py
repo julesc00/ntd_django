@@ -1,3 +1,5 @@
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
@@ -5,26 +7,17 @@ from rest_framework.decorators import action
 
 from api.models import Planet, Terrain, Climate
 from api.serializers import PlanetSerializer, TerrainSerializer, ClimateSerializer
-from api.queries import planets_query
-from api.helpers import APIClient
-
-
-URL = "https://swapi-graphql.netlify.app/.netlify/functions/index"
-
-QUERY = planets_query()
 
 
 class PlanetViewSet(viewsets.ModelViewSet):
     queryset = Planet.objects.all()
     serializer_class = PlanetSerializer
 
-    client = APIClient(url=URL, query=QUERY)
-    data = client.get()
-
-    @action(detail=False, methods=['get'])
-    def fetch_and_create_planets(self, request):
+    @method_decorator(csrf_exempt)
+    @action(detail=False, methods=['post'])
+    def batch_create(self, request):
         created_planets = []
-        for planet_data in self.data['data']['allPlanets']['planets']:
+        for planet_data in request.data:
             serializer = self.get_serializer(data=planet_data)
             serializer.is_valid(raise_exception=True)
             planet = serializer.save()
