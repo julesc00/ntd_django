@@ -9,7 +9,6 @@ URL = "https://swapi-graphql.netlify.app/.netlify/functions/index"
 API_URL = "http://127.0.0.1:8000/api/planets/batch_create/"
 
 QUERY = planets_query()
-# List of records to create
 
 client = APIClient(url=URL, query=QUERY)
 data = client.get()
