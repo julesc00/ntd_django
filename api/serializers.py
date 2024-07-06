@@ -1,14 +1,6 @@
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework import serializers
 
 from api.models import Terrain, Climate, Planet
-from api.queries import planets_query
-from api.helpers import APIClient
-
-
-URL = "https://swapi-graphql.netlify.app/.netlify/functions/index"
-
-QUERY = planets_query()
 
 
 class TerrainSerializer(serializers.ModelSerializer):
@@ -56,12 +48,12 @@ class PlanetSerializer(serializers.ModelSerializer):
 
         instance.terrains.clear()
         for terrain_data in terrains_data:
-            terrain, created = Terrain.objects.get_or_create(**terrain_data)
+            terrain, _ = Terrain.objects.get_or_create(**terrain_data)
             instance.terrains.add(terrain)
 
         instance.climates.clear()
         for climate_data in climates_data:
-            climate, created = Climate.objects.get_or_create(**climate_data)
+            climate, _ = Climate.objects.get_or_create(**climate_data)
             instance.climates.add(climate)
 
         return instance
