@@ -29,7 +29,7 @@ def add_terrains_or_climates_to_db(url: str, api_data: List, field: str):
     """
     headers = {'Content-Type': 'application/json'}
 
-    # Get current terrains or climates from the API
+    # Get current terrains or climates from the DB
     try:
         response = requests.get(url)
         json_res = response.json()
