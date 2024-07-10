@@ -2,7 +2,7 @@ import requests
 from http import HTTPStatus
 
 from helpers import APIClient
-from queries import planets_query, climates_query, terrains_query
+from queries import planets_query
 
 
 URL = "https://swapi-graphql.netlify.app/.netlify/functions/index"
