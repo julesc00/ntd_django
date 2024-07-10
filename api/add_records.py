@@ -1,5 +1,6 @@
 import requests
 from http import HTTPStatus
+from typing import List
 
 from helpers import APIClient
 from queries import planets_query
@@ -17,7 +18,15 @@ def get_api_data():
     return data['data']['allPlanets']['planets']
 
 
-def add_terrains_or_climates_to_db(url, api_data, field):
+def add_terrains_or_climates_to_db(url: str, api_data: List, field: str):
+    """
+    Add terrains or climates to the database.
+    :param url: The URL to post the data to.
+    :param api_data: Imported data from GraphQL API to be compared and added.
+    :param field: The field to be compared and added.
+    :return: None
+
+    """
     headers = {'Content-Type': 'application/json'}
 
     # Get current terrains or climates from the API
