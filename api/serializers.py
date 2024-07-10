@@ -6,13 +6,13 @@ from api.models import Terrain, Climate, Planet
 class TerrainSerializer(serializers.ModelSerializer):
     class Meta:
         model = Terrain
-        fields = ['id', 'name']
+        fields = ['name']
 
 
 class ClimateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Climate
-        fields = ['id', 'name']
+        fields = ['name']
 
 
 class PlanetSerializer(serializers.ModelSerializer):
@@ -21,23 +21,19 @@ class PlanetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Planet
-        fields = ['id', 'name', 'population', 'terrains', 'climates']
+        fields = ['name', 'population', 'terrains', 'climates']
 
     def create(self, validated_data):
-
-        print(validated_data)
-
         terrains_data = validated_data.pop('terrains')
         climates_data = validated_data.pop('climates')
         planet = Planet.objects.create(**validated_data)
 
         for terrain_data in terrains_data:
-
-            terrain, _ = Terrain.objects.get_or_create(**terrain_data)
+            terrain, _ = Terrain.objects.get_or_create(name=terrain_data['name'])
             planet.terrains.add(terrain)
 
         for climate_data in climates_data:
-            climate, _ = Climate.objects.get_or_create(**climate_data)
+            climate, _ = Climate.objects.get_or_create(name=climate_data['name'])
             planet.climates.add(climate)
 
         return planet

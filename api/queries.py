@@ -12,3 +12,27 @@ def planets_query():
   }
 }
 """
+
+
+def climates_query():
+    return """
+{
+  allPlanets {
+    planets {
+      climates
+    }
+  }
+}
+"""
+
+
+def terrains_query():
+    return """
+{
+  allPlanets {
+    planets {
+      terrains
+    }
+  }
+}
+"""

@@ -21,9 +21,7 @@ class PlanetViewSet(viewsets.ModelViewSet):
         created_planets = []
 
         for planet_data in request.data:
-            breakpoint()
             serializer = self.get_serializer(data=planet_data)
-
             serializer.is_valid(raise_exception=True)
             planet = serializer.save()
             created_planets.append(planet)

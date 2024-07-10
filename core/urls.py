@@ -6,5 +6,5 @@ from api.views import PlanetViewSet, TerrainViewSet, ClimateViewSet
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include("api.urls")),
+    path("api/", include("api.urls")),
 ]
