@@ -19,9 +19,18 @@ def get_api_data():
 
 def add_terrains_or_climates_to_db(url, api_data, field):
     headers = {'Content-Type': 'application/json'}
-    tmp = {item for planet in api_data for item in planet[field]}  # Using set to remove duplicates
-    final_data = [{"name": item} for item in tmp]
 
+    # Get current terrains or climates from the API
+    response = requests.get(url)
+    json_res = response.json()
+    current_db_items = {item["name"] for item in json_res}
+
+    tmp = {item for planet in api_data for item in planet[field]}  # Using set to remove duplicates
+    merged_items = current_db_items ^ tmp  # Get the difference between the two sets
+    final_data = [{"name": item} for item in merged_items if merged_items]
+    if not final_data:
+        print(f"No new {field[:-1]} to add")
+        return
     for planet in final_data:
         res = requests.post(url, json=planet, headers=headers)
         if res.status_code == HTTPStatus.CREATED:
