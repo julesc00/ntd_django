@@ -1,7 +1,7 @@
 """
-response =
+response = [
     {'name': 'Hoth', 'population': None, 'terrains': ['tundra', 'ice caves', 'mountain ranges'], 'climates': ['frozen']}
-    {'name': 'Dagobah', 'population': None, 'terrains': ['swamp', 'jungles'], 'climates': ['murky']}
+    {'name': 'Dagobah', 'population': None, 'terrains': ['swamp', 'jungles'], 'climates': ['murky']}0
     {'name': 'Bespin', 'population': 6000000, 'terrains': ['gas giant'], 'climates': ['temperate']}
     {'name': 'Endor', 'population': 30000000, 'terrains': ['forests', 'mountains', 'lakes'], 'climates': ['temperate']}
     {'name': 'Naboo', 'population': 4500000000, 'terrains': ['grassy hills', 'swamps', 'forests', 'mountains'],

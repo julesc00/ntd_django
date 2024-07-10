@@ -16,7 +16,7 @@ planets_data = data['data']['allPlanets']['planets']
 
 # Make a POST request to the batch_create endpoint with the list of records
 response = requests.post(API_URL, json=planets_data)
-breakpoint()
+
 if response.status_code == HTTPStatus.CREATED:
     print(f"Batch Created: {response.json()}")
 else:

@@ -24,11 +24,15 @@ class PlanetSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'population', 'terrains', 'climates']
 
     def create(self, validated_data):
+
+        print(validated_data)
+
         terrains_data = validated_data.pop('terrains')
         climates_data = validated_data.pop('climates')
         planet = Planet.objects.create(**validated_data)
 
         for terrain_data in terrains_data:
+
             terrain, _ = Terrain.objects.get_or_create(**terrain_data)
             planet.terrains.add(terrain)
 

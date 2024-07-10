@@ -2,6 +2,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.parsers import JSONParser
 from rest_framework import status
 from rest_framework.decorators import action
 
@@ -12,13 +13,17 @@ from api.serializers import PlanetSerializer, TerrainSerializer, ClimateSerializ
 class PlanetViewSet(viewsets.ModelViewSet):
     queryset = Planet.objects.all()
     serializer_class = PlanetSerializer
+    parser_classes = [JSONParser]
 
     @method_decorator(csrf_exempt)
     @action(detail=False, methods=['post'])
     def batch_create(self, request):
         created_planets = []
+
         for planet_data in request.data:
+            breakpoint()
             serializer = self.get_serializer(data=planet_data)
+
             serializer.is_valid(raise_exception=True)
             planet = serializer.save()
             created_planets.append(planet)
