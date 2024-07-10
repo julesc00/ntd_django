@@ -29,18 +29,8 @@ def add_terrains_or_climates_to_db(url, api_data, field):
     """
     headers = {'Content-Type': 'application/json'}
 
-    # Get current terrains or climates from the DB
-    try:
-        response = requests.get(url)
-        json_res = response.json()
-        current_db_items = {item["name"] for item in json_res}
-    except requests.exceptions.RequestException as e:
-        print(f"[ERROR] {e}")
-        return
-
     tmp = {item for planet in api_data for item in planet[field]}  # Using set to remove duplicates
-    merged_items = current_db_items ^ tmp  # Get the difference between the two sets
-    final_data = [{"name": item} for item in merged_items if merged_items]
+    final_data = [{"name": item} for item in tmp if tmp]
 
     singular_field = field[:-1]
     if not final_data:
@@ -82,7 +72,6 @@ if __name__ == "__main__":
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = [executor.submit(run_task, task) for task in tasks]
-
         for future in concurrent.futures.as_completed(futures):
             try:
                 future.result()
