@@ -7,3 +7,7 @@
 ```pipenv install django```  
 Start environment:  ```pipenv shell```  
 Run server: ```python manage.py runserver``` or ```./manage.py runserver```
+
+## Records import from GraphQL API
+1. Run file api/add_records.py:  
+```python api/add_records.py```

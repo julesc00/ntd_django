@@ -1,6 +1,6 @@
+import concurrent.futures
 import requests
 from http import HTTPStatus
-from typing import List
 
 from helpers import APIClient
 from queries import planets_query
@@ -18,7 +18,7 @@ def get_api_data():
     return data['data']['allPlanets']['planets']
 
 
-def add_terrains_or_climates_to_db(url: str, api_data: List, field: str):
+def add_terrains_or_climates_to_db(url, api_data, field):
     """
     Add terrains or climates to the database.
     :param url: The URL to post the data to.
@@ -68,6 +68,23 @@ def add_planets_to_db(url, query, field):
         print(f"[INFO] Failed to create batch: {res.json()}")
 
 
+def run_task(task):
+    url, data, field = task
+    add_terrains_or_climates_to_db(url=url, api_data=data, field=field)
+
+
 if __name__ == "__main__":
-    # add_terrains_or_climates_to_db(url=TERRAINS_API_URL, api_data=get_api_data(), field="terrains")
-    add_terrains_or_climates_to_db(url=CLIMATES_API_URL, api_data=get_api_data(), field="climates")
+    api_data2 = get_api_data()
+    tasks = [
+        (TERRAINS_API_URL, api_data2, "terrains"),
+        (CLIMATES_API_URL, api_data2, "climates")
+    ]
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = [executor.submit(run_task, task) for task in tasks]
+
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                future.result()
+            except Exception as err:
+                print(f"Task raised an exception: {err}")
