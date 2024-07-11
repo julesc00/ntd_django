@@ -1,6 +1,7 @@
 import concurrent.futures
-import requests
 from http import HTTPStatus
+
+import requests
 
 from helpers import APIClient
 from queries import planets_query
