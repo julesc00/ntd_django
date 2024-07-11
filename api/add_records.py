@@ -55,12 +55,15 @@ def add_planets_to_db(url, query, field):
     client = APIClient(url=URL, query=query)
     temp_planet_data = client.get()
     data = temp_planet_data['data']['allPlanets'][field]
-    for planet in data:
-        res = requests.post(url, json=planet, headers=headers)
-        if res.status_code != HTTPStatus.CREATED:
-            print(f"[INFO] Failed to create batch: {planet['name']}")
-        else:
-            print(f"[INFO] Create planet: {planet['name']}")
+    try:
+        for planet in data:
+            res = requests.post(url, json=planet, headers=headers)
+            if res.status_code != HTTPStatus.CREATED:
+                print(f"[INFO] Failed to create batch: {planet['name']}, item already exists.")
+            else:
+                print(f"[INFO] Created planet: {planet['name']}")
+    except requests.exceptions.RequestException as e:
+        print(f"[ERROR] {e}")
 
 
 def run_task(task):
