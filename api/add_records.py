@@ -1,5 +1,6 @@
 import concurrent.futures
 from http import HTTPStatus
+from typing import List
 
 import requests
 
@@ -13,7 +14,7 @@ TERRAINS_API_URL = "http://127.0.0.1:8000/api/terrains/"
 CLIMATES_API_URL = "http://127.0.0.1:8000/api/climates/"
 
 
-def get_api_data():
+def get_api_data() -> List:
     """
     Get data from the GraphQL API.
     """
@@ -22,7 +23,7 @@ def get_api_data():
     return data['data']['allPlanets']['planets']
 
 
-def add_terrains_or_climates_to_db(url, api_data, field):
+def add_terrains_or_climates_to_db(url: str, api_data: List, field: str):
     """
     Add terrains or climates to the database.
     :param url: The URL to post the data to.
@@ -51,7 +52,10 @@ def add_terrains_or_climates_to_db(url, api_data, field):
         print(f"[ERROR] {e}")
 
 
-def add_planets_to_db(url, query, field):
+def add_planets_to_db(url: str, query: str, field: str) -> None:
+    """
+    Add planets to the database.
+    """
     headers = {'Content-Type': 'application/json'}
     client = APIClient(url=URL, query=query)
     temp_planet_data = client.get()
@@ -67,7 +71,7 @@ def add_planets_to_db(url, query, field):
         print(f"[ERROR] {e}")
 
 
-def run_task(task):
+def run_task(task: tuple) -> None:
     """
     Run the task concurrently.
     """
