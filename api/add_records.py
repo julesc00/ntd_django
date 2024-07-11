@@ -7,12 +7,15 @@ from queries import planets_query
 
 
 URL = "https://swapi-graphql.netlify.app/.netlify/functions/index"
-PLANETS_API_URL = "http://127.0.0.1:8000/api/planets/batch_create/"
+PLANETS_API_URL = "http://127.0.0.1:8000/api/api/planets/batch_create/"
 TERRAINS_API_URL = "http://127.0.0.1:8000/api/terrains/"
 CLIMATES_API_URL = "http://127.0.0.1:8000/api/climates/"
 
 
 def get_api_data():
+    """
+    Get data from the GraphQL API.
+    """
     client = APIClient(url=URL, query=planets_query())
     data = client.get()
     return data['data']['allPlanets']['planets']
@@ -48,22 +51,31 @@ def add_terrains_or_climates_to_db(url, api_data, field):
 
 
 def add_planets_to_db(url, query, field):
+    headers = {'Content-Type': 'application/json'}
     client = APIClient(url=URL, query=query)
     temp_planet_data = client.get()
     data = temp_planet_data['data']['allPlanets'][field]
-    res = requests.post(url, json=data)
-    if res.status_code == HTTPStatus.CREATED:
-        print(f"[INFO] Batch Created: {res.json()}")
-    else:
-        print(f"[INFO] Failed to create batch: {res.json()}")
+    for planet in data:
+        res = requests.post(url, json=planet, headers=headers)
+        if res.status_code != HTTPStatus.CREATED:
+            print(f"[INFO] Failed to create batch: {planet['name']}")
+        else:
+            print(f"[INFO] Create planet: {planet['name']}")
 
 
 def run_task(task):
+    """
+    Run the task concurrently.
+    """
     url, data, field = task
     add_terrains_or_climates_to_db(url=url, api_data=data, field=field)
 
 
 if __name__ == "__main__":
+    """
+    Adding terrains and climates to the database don't depend of each other, 
+    so we can run them concurrently.
+    """
     api_data2 = get_api_data()
     tasks = [
         (TERRAINS_API_URL, api_data2, "terrains"),
@@ -77,3 +89,6 @@ if __name__ == "__main__":
                 future.result()
             except Exception as err:
                 print(f"Task raised an exception: {err}")
+
+    # Process planets
+    add_planets_to_db(url=PLANETS_API_URL, query=planets_query(), field="planets")

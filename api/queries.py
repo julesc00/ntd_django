@@ -1,4 +1,9 @@
 
+"""
+GraphQL queries for the Planets API.
+"""
+
+
 def planets_query():
     return """
 {

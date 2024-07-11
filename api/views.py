@@ -18,13 +18,16 @@ class PlanetViewSet(viewsets.ModelViewSet):
     @method_decorator(csrf_exempt)
     @action(detail=False, methods=['post'])
     def batch_create(self, request):
+        """
+        Process a batch of planets.
+        TODO: Change function name since it's not batch_creating anymore, this is done in `add_records.py`.
+        """
         created_planets = []
-
-        for planet_data in request.data:
-            serializer = self.get_serializer(data=planet_data)
-            serializer.is_valid(raise_exception=True)
-            planet = serializer.save()
-            created_planets.append(planet)
+        planet_data = request.data
+        serializer = self.get_serializer(data=planet_data)
+        serializer.is_valid(raise_exception=True)
+        planet = serializer.save()
+        created_planets.append(planet)
 
         return Response({
             "status": "success",

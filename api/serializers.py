@@ -1,23 +1,33 @@
 from rest_framework import serializers
-
-from api.models import Terrain, Climate, Planet
+from .models import Planet, Terrain, Climate
 
 
 class TerrainSerializer(serializers.ModelSerializer):
     class Meta:
         model = Terrain
         fields = ['name']
+        read_only_fields = ("id",)
 
 
 class ClimateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Climate
         fields = ['name']
+        read_only_fields = ("id",)
 
 
 class PlanetSerializer(serializers.ModelSerializer):
-    terrains = TerrainSerializer(many=True)
-    climates = ClimateSerializer(many=True)
+    terrains = serializers.SlugRelatedField(
+        many=True,
+        slug_field='name',
+        queryset=Terrain.objects.all(),
+
+    )
+    climates = serializers.SlugRelatedField(
+        many=True,
+        slug_field='name',
+        queryset=Climate.objects.all()
+    )
 
     class Meta:
         model = Planet
@@ -28,12 +38,13 @@ class PlanetSerializer(serializers.ModelSerializer):
         climates_data = validated_data.pop('climates')
         planet = Planet.objects.create(**validated_data)
 
-        for terrain_data in terrains_data:
-            terrain, _ = Terrain.objects.get_or_create(name=terrain_data['name'])
+        for terrain_name in terrains_data:
+            terrain, _ = Terrain.objects.get_or_create(name=terrain_name)
             planet.terrains.add(terrain)
 
-        for climate_data in climates_data:
-            climate, _ = Climate.objects.get_or_create(name=climate_data['name'])
+        for climate_name in climates_data:
+
+            climate, _ = Climate.objects.get_or_create(name=climate_name)
             planet.climates.add(climate)
 
         return planet
@@ -46,7 +57,7 @@ class PlanetSerializer(serializers.ModelSerializer):
         instance.population = validated_data.get('population', instance.population)
         instance.save()
 
-        instance.terrains.clear()
+        instance.terrain.clear()
         for terrain_data in terrains_data:
             terrain, _ = Terrain.objects.get_or_create(**terrain_data)
             instance.terrains.add(terrain)
